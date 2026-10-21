@@ -122,11 +122,13 @@ public class CatalogContextSeed
 
         return new List<Order>
             {
+                new(buyerId, address, new List<OrderItem> { Line("Better Meetings", 1) }, today.AddDays(-3)),
                 new(buyerId, address, new List<OrderItem> { Line("SQL for Analysts", 1), Line("Chart Literacy", 1) }, today.AddDays(-10)),
                 new(buyerId, address, new List<OrderItem> { Line("Feedback That Lands", 2) }, today.AddDays(-11)),
                 new(buyerId, address, new List<OrderItem> { Line("Leading Your First Project", 1) }, today.AddDays(-12)),
                 new(buyerId, address, new List<OrderItem> { Line("Git for Teams", 1), Line("Usability Testing on a Budget", 1) }, today.AddDays(-13)),
                 new(buyerId, address, new List<OrderItem> { Line("Data Storytelling Basics", 1) }, today.AddDays(-14)),
+                new(buyerId, address, new List<OrderItem> { Line("API Design Fundamentals", 1) }, today.AddDays(-21)),
                 new(buyerId, address, new List<OrderItem> { Line("UX Writing Essentials", 1) }, today.AddDays(-30))
             };
     }

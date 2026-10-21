@@ -3,12 +3,12 @@ using Xunit;
 
 namespace Microsoft.eShopWeb.UnitTests.ApplicationCore.Specifications;
 
-public class CatalogFilterPaginatedSpecification
+public class CatalogListingSpecification
 {
     [Fact]
     public void ReturnsAllCatalogItems()
     {
-        var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, null, null);
+        var spec = new eShopWeb.ApplicationCore.Specifications.CatalogListingSpecification(0, 10, null, null);
 
         var result = spec.Evaluate(GetTestCollection());
 
@@ -19,7 +19,7 @@ public class CatalogFilterPaginatedSpecification
     [Fact]
     public void Returns2CatalogItemsWithSameBrandAndTypeId()
     {
-        var spec = new eShopWeb.ApplicationCore.Specifications.CatalogFilterPaginatedSpecification(0, 10, 1, 1);
+        var spec = new eShopWeb.ApplicationCore.Specifications.CatalogListingSpecification(0, 10, 1, 1);
 
         var result = spec.Evaluate(GetTestCollection()).ToList();
 
