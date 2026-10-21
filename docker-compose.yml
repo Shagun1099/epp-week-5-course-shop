@@ -1,0 +1,18 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: src/Web/Dockerfile
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_URLS=http://+:8080
+    ports:
+      - "${COURSESHOP_PORT:-5106}:8080"
+
+  tests:
+    profiles: ["test"]
+    image: mcr.microsoft.com/dotnet/sdk:10.0
+    working_dir: /src
+    volumes:
+      - .:/src
+    command: dotnet test eShopOnWeb.slnx
