@@ -47,5 +47,3 @@ Run these from the repository folder on the server.
 | Read the logs | `docker compose --env-file ~/courseshop.env --profile hosted logs -f web` (straight after the first deployment, start it with `sudo`, or log in again) |
 
 The app keeps its data in memory, so any restart restores the seed data. Use `--reset` if testers fill the site with junk.
-
-The seeded purchases are dated relative to the day the app starts. To keep a purchase exactly 14 days old on the testing days, restart with `--reset` on the morning of each team's L&D day.
