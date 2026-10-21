@@ -3,16 +3,45 @@ services:
     build:
       context: .
       dockerfile: src/Web/Dockerfile
+    restart: unless-stopped
     environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
+      - ASPNETCORE_ENVIRONMENT=${COURSESHOP_ENVIRONMENT:-Docker}
       - ASPNETCORE_URLS=http://+:8080
+      - SeedDemoUsers=true
+      - Authentication__Jwt__SigningKey=${COURSESHOP_SIGNING_KEY:-}
     ports:
-      - "${COURSESHOP_PORT:-5106}:8080"
+      - "${COURSESHOP_BIND:-0.0.0.0}:${COURSESHOP_PORT:-5106}:8080"
 
+  # Public test site only: serves the app over HTTPS. See deployment.md.
+  proxy:
+    profiles: ["hosted"]
+    image: caddy:2
+    restart: unless-stopped
+    environment:
+      DOMAIN: ${DOMAIN:-localhost}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - web
+
+  # Runs the whole test suite: docker compose --profile test run --rm tests
   tests:
     profiles: ["test"]
     image: mcr.microsoft.com/dotnet/sdk:10.0
-    working_dir: /src
+    # Builds in a copy inside the container, so nothing is written to your files
     volumes:
-      - .:/src
-    command: dotnet test eShopOnWeb.slnx
+      - .:/src:ro
+      - nuget-cache:/root/.nuget/packages
+    command: >-
+      sh -c "mkdir -p /build && cd /src && tar --exclude=./.git --exclude=./.build-cache --exclude='*/bin' --exclude='*/obj' -cf - . | tar -xf - -C /build
+      && cd /build && dotnet test eShopOnWeb.slnx"
+
+volumes:
+  nuget-cache:
+  caddy-data:
+  caddy-config:
