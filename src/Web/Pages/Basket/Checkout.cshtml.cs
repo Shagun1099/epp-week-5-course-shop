@@ -36,7 +36,12 @@ public class CheckoutModel : PageModel
 
     public BasketViewModel BasketModel { get; set; } = new BasketViewModel();
 
-    public decimal BookingFee => BasketModel.Total() > 50 ? 0 : 5;
+    [BindProperty]
+    public bool PrintedCertificate { get; set; }
+
+    public decimal BookingFee => global::Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Order.BookingFee(BasketModel.Total());
+    public decimal CertificateUnitPrice => global::Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Order.CertificatePrice;
+    public decimal CertificateTotal => PrintedCertificate ? CertificateUnitPrice : 0m;
 
     public async Task OnGet()
     {
@@ -56,7 +61,7 @@ public class CheckoutModel : PageModel
 
             var updateModel = items.ToDictionary(b => b.Id.ToString(), b => b.Quantity);
             await _basketService.SetQuantities(BasketModel.Id, updateModel);
-            await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"));
+            await _orderService.CreateOrderAsync(BasketModel.Id, new Address("123 Main St.", "Kent", "OH", "United States", "44240"), PrintedCertificate);
             await _basketService.DeleteBasketAsync(BasketModel.Id);
         }
         catch (EmptyBasketOnCheckoutException emptyBasketOnCheckoutException)

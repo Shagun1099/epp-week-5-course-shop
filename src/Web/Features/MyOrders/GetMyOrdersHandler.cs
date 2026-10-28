@@ -26,7 +26,9 @@ public class GetMyOrdersHandler : IRequestHandler<GetMyOrders, IEnumerable<Order
             OrderDate = o.OrderDate,
             OrderNumber = o.Id,
             ShippingAddress = o.ShipToAddress,
+            PrintedCertificate = o.PrintedCertificate,
             Total = o.OrderItems.Sum(i => i.UnitPrice * i.Units)
+                  + (o.PrintedCertificate ? Order.CertificatePrice : 0m)
         });
     }
 }
