@@ -48,7 +48,7 @@
 
                 <div class="container">
                     @{
-                        var bookingFee = Model.BasketModel.Total() >= 50 ? 0m : 5m;
+                        var bookingFee = global::Microsoft.eShopWeb.ApplicationCore.Entities.OrderAggregate.Order.BookingFee(Model.BasketModel.Total());
                     }
                     <article class="esh-basket-titles esh-basket-titles--clean row">
                         <section class="esh-basket-title col-xs-6"></section>

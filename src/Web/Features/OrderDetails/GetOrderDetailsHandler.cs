@@ -27,7 +27,8 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderDeta
         }
 
         var subtotal = order.OrderItems.Sum(i => i.UnitPrice * i.Units);
-        var bookingFee = subtotal < 50 ? 5m : 0m;
+        var bookingFee = Order.BookingFee(subtotal);
+        var certPrice = order.PrintedCertificate ? Order.CertificatePrice : 0m;
 
         return new OrderDetailViewModel
         {
@@ -44,7 +45,9 @@ public class GetOrderDetailsHandler : IRequestHandler<GetOrderDetails, OrderDeta
             ShippingAddress = order.ShipToAddress,
             Subtotal = subtotal,
             BookingFee = bookingFee,
-            Total = subtotal + bookingFee,
+            PrintedCertificate = order.PrintedCertificate,
+            CertificatePrice = certPrice,
+            Total = subtotal + bookingFee + certPrice,
             Refundable = (DateTimeOffset.UtcNow - order.OrderDate).TotalDays < 14
         };
     }
