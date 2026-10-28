@@ -48,18 +48,31 @@
                 }
 
                 <div class="container">
+                    <article class="esh-basket-items row">
+                        <section class="esh-basket-item col-xs-8">
+                            <label>
+                                <input type="checkbox" asp-for="PrintedCertificate"
+                                       data-cert-price="@Model.CertificateUnitPrice"
+                                       data-base-total="@(Model.BasketModel.Total() + Model.BookingFee)" />
+                                Add a printed certificate ($@Model.CertificateUnitPrice.ToString("N2") per purchase)
+                            </label>
+                        </section>
+                    </article>
+
                     <article class="esh-basket-titles esh-basket-titles--clean row">
-                        <section class="esh-basket-title col-xs-6"></section>
+                        <section class="esh-basket-title col-xs-4"></section>
                         <section class="esh-basket-title col-xs-2">Subtotal</section>
                         <section class="esh-basket-title col-xs-2">Booking fee</section>
+                        <section class="esh-basket-title col-xs-2">Certificate</section>
                         <section class="esh-basket-title col-xs-2">Total</section>
                     </article>
 
                     <article class="esh-basket-items row">
-                        <section class="esh-basket-item col-xs-6"></section>
+                        <section class="esh-basket-item col-xs-4"></section>
                         <section class="esh-basket-item col-xs-2">$ @Model.BasketModel.Total().ToString("N2")</section>
                         <section class="esh-basket-item col-xs-2">$ @Model.BookingFee.ToString("N2")</section>
-                        <section class="esh-basket-item esh-basket-item--mark col-xs-2">$ @((Model.BasketModel.Total() + Model.BookingFee).ToString("N2"))</section>
+                        <section id="cert-total" class="esh-basket-item col-xs-2">$ @Model.CertificateTotal.ToString("N2")</section>
+                        <section id="order-total" class="esh-basket-item esh-basket-item--mark col-xs-2">$ @((Model.BasketModel.Total() + Model.BookingFee + Model.CertificateTotal).ToString("N2"))</section>
                     </article>
 
                     <article class="esh-basket-items row">
@@ -76,6 +89,22 @@
                 </div>
             </div>
         </form>
+
+        <script>
+            (function () {
+                var cb = document.getElementById('PrintedCertificate');
+                var certCell = document.getElementById('cert-total');
+                var totalCell = document.getElementById('order-total');
+                var certPrice = parseFloat(cb.dataset.certPrice);
+                var baseTotal = parseFloat(cb.dataset.baseTotal);
+
+                cb.addEventListener('change', function () {
+                    var cert = cb.checked ? certPrice : 0;
+                    certCell.textContent = '$ ' + cert.toFixed(2);
+                    totalCell.textContent = '$ ' + (baseTotal + cert).toFixed(2);
+                });
+            })();
+        </script>
     }
     else
     {

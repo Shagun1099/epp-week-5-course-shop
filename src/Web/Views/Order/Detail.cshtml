@@ -60,20 +60,30 @@
                     <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-2">$ @Math.Round(item.Units * item.UnitPrice, 2).ToString("N2")</section>
                 </article>
             }
+
+            @if (Model.PrintedCertificate)
+            {
+                <article class="esh-orders-detail-items esh-orders-detail-items--border row">
+                    <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-7">Printed certificate</section>
+                    <section class="esh-orders-detail-item esh-orders-detail-item--middle col-xs-2">$ @Model.CertificatePrice.ToString("N2")</section>
+                </article>
+            }
         </section>
 
         <section class="esh-orders-detail-section esh-orders-detail-section--right">
             <article class="esh-orders-detail-titles esh-basket-titles--clean row">
-                <section class="esh-orders-detail-title col-xs-5"></section>
+                <section class="esh-orders-detail-title col-xs-3"></section>
                 <section class="esh-orders-detail-title col-xs-2">SUBTOTAL</section>
                 <section class="esh-orders-detail-title col-xs-2">BOOKING FEE</section>
+                <section class="esh-orders-detail-title col-xs-2">CERTIFICATE</section>
                 <section class="esh-orders-detail-title col-xs-2">TOTAL</section>
             </article>
 
             <article class="esh-orders-detail-items row">
-                <section class="esh-orders-detail-item col-xs-5"></section>
+                <section class="esh-orders-detail-item col-xs-3"></section>
                 <section class="esh-orders-detail-item col-xs-2">$ @Model.Subtotal.ToString("N2")</section>
                 <section class="esh-orders-detail-item col-xs-2">$ @Model.BookingFee.ToString("N2")</section>
+                <section class="esh-orders-detail-item col-xs-2">$ @Model.CertificatePrice.ToString("N2")</section>
                 <section class="esh-orders-detail-item esh-orders-detail-item--mark col-xs-2">$ @Model.Total.ToString("N2")</section>
             </article>
         </section>

@@ -8,10 +8,11 @@
         <h1>@ViewData["Title"]</h1>
         <article class="esh-orders-titles row">
             <section class="esh-orders-title col-xs-2">Purchase number</section>
-            <section class="esh-orders-title col-xs-4">Date</section>
+            <section class="esh-orders-title col-xs-3">Date</section>
             <section class="esh-orders-title col-xs-2">Total</section>
+            <section class="esh-orders-title col-xs-2">Certificate</section>
             <section class="esh-orders-title col-xs-2">Refund</section>
-            <section class="esh-orders-title col-xs-2"></section>
+            <section class="esh-orders-title col-xs-1"></section>
         </article>
         @if (Model != null && Model.Any())
         {
@@ -19,17 +20,12 @@
             {
                 <article class="esh-orders-items row">
                     <section class="esh-orders-item col-xs-2">@Html.DisplayFor(modelItem => item.OrderNumber)</section>
-                    <section class="esh-orders-item col-xs-4">@Html.DisplayFor(modelItem => item.OrderDate)</section>
+                    <section class="esh-orders-item col-xs-3">@Html.DisplayFor(modelItem => item.OrderDate)</section>
                     <section class="esh-orders-item col-xs-2">$ @Html.DisplayFor(modelItem => item.Total)</section>
+                    <section class="esh-orders-item col-xs-2">@(item.PrintedCertificate ? "Yes" : "-")</section>
                     <section class="esh-orders-item col-xs-2">@((DateTime.Now.Date - item.OrderDate.LocalDateTime.Date).Days <= 14 ? "Refundable" : "Final sale")</section>
                     <section class="esh-orders-item col-xs-1">
                         <a class="esh-orders-link" asp-controller="Order" asp-action="Detail" asp-route-orderId="@item.OrderNumber">Detail</a>
-                    </section>
-                    <section class="esh-orders-item col-xs-1">
-                        @if (item.Status.ToLower() == "submitted")
-                    {
-                            <a class="esh-orders-link" asp-controller="Order" asp-action="cancel" asp-route-orderId="@item.OrderNumber">Cancel</a>
-                        }
                     </section>
                 </article>
             }
